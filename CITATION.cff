@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+title: "IES to HQDM crosswalk"
+message: "If you use this crosswalk, please cite it and the companion working paper."
+type: dataset
+authors:
+  - family-names: Rovai
+    given-names: Fabio
+    affiliation: "Tesseract Academy (Kampakis and Co Ltd)"
+version: 0.1.0
+date-released: 2026-07-01
+license: CC-BY-4.0
+url: "https://github.com/tesseract-academy/ies-hqdm-crosswalk"
+abstract: >-
+  The first public machine-readable crosswalk between the UK Information Exchange
+  Standard (IES) and the Higher Quality Data Model (HQDM), two 4D upper ontologies
+  from the shared BORO / ISO 15926 tradition. Provides SSSOM and RDF correspondences
+  for the 4D backbone, a curated record of divergences, SHACL validation, and a
+  reference alignment pipeline.
+references:
+  - type: article
+    title: "Trusted, Interoperable Autonomy for UK Defence Data: Grounding Assurance in a Shared 4D Ontology"
+    authors:
+      - family-names: Rovai
+        given-names: Fabio
+    year: 2026

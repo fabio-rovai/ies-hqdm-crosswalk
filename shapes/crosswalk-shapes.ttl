@@ -1,0 +1,65 @@
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix cw:    <https://w3id.org/tesseract/ies-hqdm/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+
+#################################################################
+# SHACL shapes validating the reified crosswalk correspondences.
+# Run with pyshacl:
+#   pyshacl -s shapes/crosswalk-shapes.ttl -df turtle crosswalk/ies-hqdm.ttl
+#################################################################
+
+cw:CorrespondenceShape a sh:NodeShape ;
+    sh:targetClass cw:Correspondence ;
+
+    sh:property [
+        sh:path cw:subject ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Every correspondence must have exactly one IRI subject (the IES term)." ;
+    ] ;
+
+    sh:property [
+        sh:path cw:object ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Every correspondence must have exactly one IRI object (the HQDM term)." ;
+    ] ;
+
+    sh:property [
+        sh:path cw:predicate ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ( skos:exactMatch skos:closeMatch skos:broadMatch skos:narrowMatch skos:relatedMatch ) ;
+        sh:message "Predicate must be one of the SKOS mapping predicates." ;
+    ] ;
+
+    sh:property [
+        sh:path cw:confidence ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0.0 ; sh:maxInclusive 1.0 ;
+        sh:message "Confidence must be a single decimal in [0.0, 1.0]." ;
+    ] ;
+
+    sh:property [
+        sh:path prov:wasGeneratedBy ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Every correspondence must carry provenance (prov:wasGeneratedBy an Activity)." ;
+    ] ;
+
+    # A skos:exactMatch is too strong to assert at low confidence: guard it.
+    sh:sparql [
+        sh:message "A correspondence asserted as skos:exactMatch must have confidence >= 0.9." ;
+        sh:prefixes cw: ;
+        sh:select """
+            PREFIX cw: <https://w3id.org/tesseract/ies-hqdm/>
+            PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+            SELECT $this WHERE {
+                $this cw:predicate skos:exactMatch ;
+                      cw:confidence ?c .
+                FILTER (?c < 0.9)
+            }
+        """ ;
+    ] .

@@ -1,0 +1,25 @@
+IES <-> HQDM crosswalk
+Copyright 2026 Kampakis and Co Ltd (trading as Tesseract Academy)
+
+The crosswalk data and documentation in this repository are licensed under
+Creative Commons Attribution 4.0 International (CC-BY-4.0). See LICENSE.
+
+This work references, but does not redistribute, two upstream ontologies:
+
+1. Information Exchange Standard (IES)
+   Source: https://github.com/IES-Org/ont-ies (docs/specification/ies-common.ttl)
+   Namespace: http://informationexchangestandard.org/ont/ies/common/
+   Licence: Open Government Licence v3.0
+   Developed by Dstl and cross-government partners; custodian: the
+   cross-government IES Working Group.
+
+2. Higher Quality Data Model (HQDM)
+   Source: https://github.com/gchq/HQDM (hqdm.owl)
+   Namespace: http://www.semanticweb.org/magma-core/ontologies/hqdm#
+   Licence: Apache License 2.0, Crown Copyright.
+   Based on the HQDM framework of Matthew West, "Developing High Quality Data
+   Models" (Morgan Kaufmann, 2011).
+
+Correspondence assertions in crosswalk/ are the work of Tesseract Academy and
+are candidate-for-review; they are not endorsed by, or affiliated with, Dstl,
+GCHQ, the IES Working Group, or the National Digital Twin Programme.

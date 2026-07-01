@@ -1,0 +1,30 @@
+# curie_map:
+#   ies: "http://informationexchangestandard.org/ont/ies/common/"
+#   hqdm: "http://www.semanticweb.org/magma-core/ontologies/hqdm#"
+#   skos: "http://www.w3.org/2004/02/skos/core#"
+#   semapv: "https://w3id.org/semapv/vocab/"
+# mapping_set_id: "https://github.com/tesseract-academy/ies-hqdm-crosswalk"
+# mapping_set_title: "IES to HQDM 4D upper-ontology crosswalk"
+# mapping_set_version: "0.1.0"
+# license: "https://creativecommons.org/licenses/by/4.0/"
+# creator_label: "Tesseract Academy"
+# mapping_date: "2026-07-01"
+# comment: "First public crosswalk between the UK Information Exchange Standard (IES) and the Higher Quality Data Model (HQDM). Backbone (4D) correspondences only in v0.1. All correspondences are candidate-for-review, hand-curated from the published ontologies (IES-Org/ont-ies ies-common.ttl; gchq/HQDM hqdm.owl) and grounded in the shared BORO / ISO 15926 4D tradition. Confidence is the curator's subjective strength. See DIVERGENCES.md for pairs that do NOT cleanly map."
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence	comment
+ies:Thing	Thing	skos:closeMatch	hqdm:thing	thing	semapv:ManualMappingCuration	0.75	Both are the abstract root of the ontology. IES Thing also parents abstract (non-4D) classes; HQDM thing parents abstract_object and spatio_temporal_extent.
+ies:Element	Element	skos:closeMatch	hqdm:spatio_temporal_extent	spatio_temporal_extent	semapv:ManualMappingCuration	0.9	IES Element is "a Thing that has a spatial extent and can have start and end dates" — the 4D individual root. Direct counterpart of the HQDM 4D root.
+ies:Entity	Entity	skos:closeMatch	hqdm:individual	individual	semapv:ManualMappingCuration	0.85	IES Entity = a whole-life, persisting thing (Person, Device, Organisation...). HQDM individual = a whole-life spatio_temporal_extent. Close; HQDM physical_object is a narrower alternative for tangible entities.
+ies:State	State	skos:closeMatch	hqdm:state	state	semapv:ManualMappingCuration	0.85	Both model a temporal part of an individual. Structural divergence: IES State is a top-level root class; HQDM state is subsumed under spatio_temporal_extent. See DIVERGENCES.md #3.
+ies:Event	Event	skos:closeMatch	hqdm:activity	activity	semapv:ManualMappingCuration	0.8	IES Event is "an activity or incident, involving one or more participants" — a happening. Its true HQDM counterpart is activity, NOT hqdm:event. See DIVERGENCES.md #1.
+ies:Event	Event	skos:relatedMatch	hqdm:event	event	semapv:ManualMappingCuration	0.25	FALSE FRIEND. hqdm:event is an instantaneous temporal boundary (a point), not a happening. Recorded only to warn against the name-based mapping. See DIVERGENCES.md #1.
+ies:BoundingState	BoundingState	skos:relatedMatch	hqdm:event	event	semapv:ManualMappingCuration	0.55	IES bounds temporal extents with BoundingState (a State at the start/end); HQDM bounds them with event (a point) via beginning/ending. Same job, different ontological device. See DIVERGENCES.md #2.
+ies:PeriodOfTime	PeriodOfTime	skos:closeMatch	hqdm:period_of_time	period_of_time	semapv:ManualMappingCuration	0.88	Both are a temporal extent that is everywhere in space and bounded in time.
+ies:ParticularPeriod	ParticularPeriod	skos:closeMatch	hqdm:period_of_time	period_of_time	semapv:ManualMappingCuration	0.75	IES ParticularPeriod is an ISO8601-anchored particular; maps to a HQDM period_of_time individual (an instance), not the class.
+ies:PossibleWorld	PossibleWorld	skos:closeMatch	hqdm:possible_world	possible_world	semapv:ManualMappingCuration	0.8	Both name a maximal consistent 4D whole. IES PossibleWorld is subsumed under Element (it is itself a spatio-temporal extent); HQDM possible_world is likewise a spatio_temporal_extent. See DIVERGENCES.md #5.
+ies:EventParticipant	EventParticipant	skos:closeMatch	hqdm:participant	participant	semapv:ManualMappingCuration	0.85	Strong convergence: both treat participation as a State / temporal part of the participating thing, not as a relation only. IES EventParticipant is a subclass of State; HQDM participant is a state_of_X.
+ies:ClassOfElement	ClassOfElement	skos:closeMatch	hqdm:class_of_spatio_temporal_extent	class_of_spatio_temporal_extent	semapv:ManualMappingCuration	0.82	Both open the powertype hierarchy over 4D individuals. IES adds a second-order ClassOfClassOfElement mirrored by HQDM class_of_class_of_spatio_temporal_extent.
+ies:isPartOf	isPartOf	skos:closeMatch	hqdm:part_of	part_of	semapv:ManualMappingCuration	0.85	Mereological part-of over spatio-temporal extents on both sides.
+ies:isParticipantIn	isParticipantIn	skos:closeMatch	hqdm:participant_in	participant_in	semapv:ManualMappingCuration	0.85	Relates a participation-state to the activity/event it is part of.
+ies:isStateOf	isStateOf	skos:closeMatch	hqdm:temporal_part_of	temporal_part_of	semapv:ManualMappingCuration	0.75	A State isStateOf its Entity ~ a state is a temporal_part_of its individual. Close but not identical: isStateOf is typed to State->Entity, temporal_part_of is general.
+ies:isStartOf	isStartOf	skos:relatedMatch	hqdm:beginning	beginning	semapv:ManualMappingCuration	0.6	IES isStartOf links a BoundingState to what it starts; HQDM beginning links a spatio_temporal_extent to its start event. Related via the boundary-device divergence (#2).
+ies:isEndOf	isEndOf	skos:relatedMatch	hqdm:ending	ending	semapv:ManualMappingCuration	0.6	As isStartOf/beginning; the end boundary.

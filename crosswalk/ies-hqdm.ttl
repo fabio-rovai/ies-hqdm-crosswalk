@@ -1,0 +1,65 @@
+@prefix ies:   <http://informationexchangestandard.org/ont/ies/common/> .
+@prefix hqdm:  <http://www.semanticweb.org/magma-core/ontologies/hqdm#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix semapv:<https://w3id.org/semapv/vocab/> .
+@prefix dcterms:<http://purl.org/dc/terms/> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix cw:    <https://w3id.org/tesseract/ies-hqdm/> .
+
+#################################################################
+# IES <-> HQDM 4D upper-ontology crosswalk, v0.1.0
+# Backbone correspondences as SKOS mapping assertions, each
+# reified as a cw:Correspondence carrying PROV-O provenance and a
+# curator confidence. Candidate-for-review, not an endorsed mapping.
+#################################################################
+
+cw:mappingSet a prov:Entity , skos:Collection ;
+    dcterms:title "IES to HQDM 4D upper-ontology crosswalk" ;
+    dcterms:creator "Tesseract Academy" ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:hasVersion "0.1.0" ;
+    prov:wasGeneratedBy cw:curationActivity .
+
+cw:curationActivity a prov:Activity ;
+    prov:startedAtTime "2026-07-01T00:00:00Z"^^xsd:dateTime ;
+    dcterms:description "Hand-curation of backbone correspondences from the published IES and HQDM ontologies, grounded in the shared BORO / ISO 15926 4D tradition." ;
+    prov:used <http://informationexchangestandard.org/ont/ies/common/> ,
+              <http://www.semanticweb.org/magma-core/ontologies/hqdm> .
+
+# --- direct SKOS assertions (machine-usable) ---
+ies:Element          skos:closeMatch   hqdm:spatio_temporal_extent .
+ies:Entity           skos:closeMatch   hqdm:individual .
+ies:State            skos:closeMatch   hqdm:state .
+ies:Event            skos:closeMatch   hqdm:activity .
+ies:PeriodOfTime     skos:closeMatch   hqdm:period_of_time .
+ies:PossibleWorld    skos:closeMatch   hqdm:possible_world .
+ies:EventParticipant skos:closeMatch   hqdm:participant .
+ies:ClassOfElement   skos:closeMatch   hqdm:class_of_spatio_temporal_extent .
+ies:Thing            skos:closeMatch   hqdm:thing .
+ies:isPartOf         skos:closeMatch   hqdm:part_of .
+ies:isParticipantIn  skos:closeMatch   hqdm:participant_in .
+ies:isStateOf        skos:closeMatch   hqdm:temporal_part_of .
+ies:BoundingState    skos:relatedMatch hqdm:event .
+ies:Event            skos:relatedMatch hqdm:event .        # FALSE FRIEND, see DIVERGENCES.md #1
+ies:isStartOf        skos:relatedMatch hqdm:beginning .
+ies:isEndOf          skos:relatedMatch hqdm:ending .
+
+# --- one worked reified correspondence (the headline divergence) ---
+cw:corr-event-activity a cw:Correspondence ;
+    skos:member cw:mappingSet ;
+    cw:subject ies:Event ;
+    cw:predicate skos:closeMatch ;
+    cw:object hqdm:activity ;
+    cw:confidence "0.80"^^xsd:decimal ;
+    prov:wasGeneratedBy cw:curationActivity ;
+    dcterms:description "ies:Event ('an activity or incident involving participants') is a happening; its HQDM counterpart is activity, not the instantaneous hqdm:event." .
+
+cw:corr-event-falsefriend a cw:Correspondence ;
+    skos:member cw:mappingSet ;
+    cw:subject ies:Event ;
+    cw:predicate skos:relatedMatch ;
+    cw:object hqdm:event ;
+    cw:confidence "0.25"^^xsd:decimal ;
+    prov:wasGeneratedBy cw:curationActivity ;
+    dcterms:description "Recorded to warn against the label-based mapping. hqdm:event is a temporal boundary point, not a happening." .
