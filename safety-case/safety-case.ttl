@@ -1,0 +1,54 @@
+@prefix cae:  <https://w3id.org/tesseract/cae/> .
+@prefix ies:  <http://informationexchangestandard.org/ont/ies/common/> .
+@prefix sc:   <https://w3id.org/tesseract/sapient-ies/> .
+@prefix civex:<https://w3id.org/tesseract/civex/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# CAE safety case for a SAPIENT edge node, with each leaf claim
+# bound to the IES types it quantifies over and to its evidence.
+# Illustrative; built on public standards + open ontologies.
+#################################################################
+
+sc:C0 a cae:Claim ;
+    rdfs:label "Edge node autonomous detect-classify-report behaviour is acceptably safe and interoperable." ;
+    cae:supportedBy sc:A0 .
+
+sc:A0 a cae:Argument ;
+    rdfs:label "Decomposition over well-typedness, causal effect, and validity envelope." ;
+    cae:subClaim sc:C1, sc:C2, sc:C3 .
+
+sc:C1 a cae:Claim ;
+    rdfs:label "Every report is well-typed against the shared IES world model." ;
+    cae:groundedIn ies:Event, ies:Entity, ies:EventParticipant, ies:ClassOfEntity, ies:ParticularPeriod ;
+    cae:evidence sc:E1 ;
+    cae:checkable true .
+
+sc:C2 a cae:Claim ;
+    rdfs:label "Each report causally achieves its intended effect on the fusion picture, identifiably." ;
+    cae:groundedIn ies:Event, ies:State ;
+    cae:evidence sc:E2 ;
+    cae:checkable true .
+
+sc:C3 a cae:Claim ;
+    rdfs:label "The node detects and flags when the situation leaves the IES-typed operating design domain." ;
+    cae:groundedIn ies:State, ies:ParticularPeriod ;
+    cae:evidence sc:E3 ;
+    cae:checkable true .
+
+# --- evidence nodes ---
+sc:E1 a cae:Evidence ;
+    rdfs:label "SHACL validation of each outgoing report against IES report shapes." ;
+    cae:evidenceType "SHACL validation report" .
+
+sc:E2 a cae:Evidence , civex:Certificate ;
+    rdfs:label "CIVeX causal-intervention certificate for the emit-report action." ;
+    cae:evidenceType "CIVeX certificate (arXiv:2605.09168)" ;
+    civex:verdict "EXECUTE" ;
+    civex:worldModel "IES-typed event graph" ;
+    civex:records "graph commitments; identification argument; one-sided LCB; provenance; risk limits" .
+
+sc:E3 a cae:Evidence ;
+    rdfs:label "Operating design domain expressed as an IES-typed runtime condition; defeater on breach." ;
+    cae:evidenceType "runtime monitor over the shared world model" .
