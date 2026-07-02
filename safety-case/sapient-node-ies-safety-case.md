@@ -34,19 +34,19 @@ Structured as Claims-Argument-Evidence, following the Dstl-sponsored templates f
 
 **A0 (argument).** C0 holds if (C1) every report is well-typed against the shared IES world model, (C2) each report action causally achieves its intended effect on the fusion picture, and (C3) the node detects and flags when the world moves outside the operating design domain the case was built on.
 
-### C1 — Reports are well-typed against the shared world model (soundness and interoperability)
+### C1, Reports are well-typed against the shared world model (soundness and interoperability)
 
 *Claim as a query:* every emitted detection is an `ies:Event` with exactly one `ies:EventParticipant` linking to the node, an object typed `ies:Entity`, a classification drawn from an agreed `ies:ClassOfEntity`, an `ies:ParticularPeriod`, and a location; and it does not mis-instantiate `ies:Event` as an HQDM-style instantaneous boundary.
 
 *Evidence:* SHACL validation of each outgoing report against IES report shapes. This is the same class of check this repository already runs over the crosswalk itself (`shapes/`). A report that omits the participation state, or types the detection as a boundary rather than an occurrence, fails validation before it is emitted. This leaf is fully machine-checkable, which the prose version ("detections are correctly formed") is not.
 
-### C2 — Each report causally achieves its intended effect (the leaf classical cases cannot discharge)
+### C2, Each report causally achieves its intended effect (the leaf classical cases cannot discharge)
 
 *Claim as a query:* issuing report R causes the fusion node's picture to include the intended, correctly-typed detection, and this effect is identifiable rather than confounded (for example by a duplicate track, a spoofed input, or a stale prior).
 
 *Evidence:* a **CIVeX certificate** (Rovai, 2026, arXiv:2605.09168). CIVeX maps the action "emit report R" to a causal query over the node's action-state graph, checks identifiability, and returns EXECUTE / REJECT / EXPERIMENT / ABSTAIN with an assumption-scoped certificate recording the graph commitments, the identification argument, a one-sided lower confidence bound, provenance and risk limits. The certificate is attached as the evidence node for C2. This is the primitive the assurance literature lacks: existing templates check that a report is *valid*, not that emitting it *causally produces the intended fused effect*. The world model the certificate is evaluated over is the IES-typed event graph, which is why C2 and C1 share a substrate.
 
-### C3 — The validity envelope is machine-detectable (operating design domain)
+### C3, The validity envelope is machine-detectable (operating design domain)
 
 *Claim as a query:* the node continuously checks whether the current situation still satisfies the IES-typed conditions the case assumes (sensor within its stated `ies:State` of health, environment within the assumed `ies:ClassOf...` conditions, time within the mission `ies:ParticularPeriod`), and raises a defeater when it does not.
 

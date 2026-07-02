@@ -1,0 +1,157 @@
+@prefix bridge: <https://w3id.org/tesseract/pyramid-bridge/> .
+@prefix pyrgeo: <https://gov.tesseract.academy/ns/pyramid-pra/geography#> .
+@prefix pyrtac: <https://gov.tesseract.academy/ns/pyramid-pra/tactical-objects#> .
+@prefix pyrdf:  <https://gov.tesseract.academy/ns/pyramid-pra/data-fusion#> .
+@prefix ies:  <http://informationexchangestandard.org/ont/ies/common/> .
+@prefix hqdm: <http://www.semanticweb.org/magma-core/ontologies/hqdm#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix ex:   <https://w3id.org/tesseract/pyramid-bridge/example#> .
+@prefix cw:   <https://w3id.org/tesseract/ies-hqdm/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# A worked PYRAMID inter-component bridge, grounded in IES/HQDM.
+#
+# PYRAMID Technical Standard V1.0 (Def Stan 00-134), section 5.2:
+# PRA components "do not share interface definitions ... a deployment
+# will use bridges to close the semantic gap", one function of which is
+# "Data element mapping (translating the meaning of data in order to
+# bridge the semantic gap)". The PRA "does not define a data
+# architecture" while recognising one is needed.
+#
+# This file supplies that reference semantics for one bridge: between
+# the Geography component (5.4.2.23) and the Tactical Objects component
+# (5.4.2.60), using the IES<->HQDM crosswalk in this repository.
+#
+# Illustrative; built on public standards + open ontologies. The
+# pyrgeo:/pyrtac: terms are Tesseract-minted identifiers for PRA
+# entities that have no public IRIs, not official MOD identifiers.
+#################################################################
+
+# --- the bridge vocabulary (minimal) ---
+bridge:refersTo a rdfs:Property ;
+    rdfs:label "refers to" ;
+    rdfs:comment "Links a component-local object to the shared real-world referent it denotes." .
+
+bridge:groundsIn a rdfs:Property ;
+    rdfs:label "grounds in" ;
+    rdfs:comment "Links a PRA component entity to the IES/HQDM term that fixes its meaning across the bridge." .
+
+# --- entity grounding (mirrors pyramid-entities-grounding.sssom.tsv) ---
+pyrtac:TacticalObject      bridge:groundsIn ies:Entity .
+pyrgeo:GeographicalFeature bridge:groundsIn ies:Entity , hqdm:physical_object .
+pyrdf:FusedObject          bridge:groundsIn ies:Entity .
+pyrtac:Behaviour           bridge:groundsIn ies:State .
+pyrgeo:FeatureType         bridge:groundsIn ies:ClassOfElement .
+pyrtac:TypeOfInterestRequirement bridge:groundsIn ies:ClassOfEntity .
+pyrdf:FusedObjectType      bridge:groundsIn ies:ClassOfEntity .
+
+#################################################################
+# The demonstration: one building, two component perspectives.
+#
+# The Tactical Objects component's own definition gives the case:
+# a Tactical_Object may be "a building that is the target of an
+# attack" (5.4.2.60.6.1). The Geography component models that same
+# building as a Geographical_Feature ("tangible (e.g. buildings)",
+# 5.4.2.23.6.1). The two components share NO type and NO identifier,
+# so a deployment cannot know they denote the same thing. The bridge,
+# grounded in IES/HQDM, makes the co-reference explicit and checkable.
+#################################################################
+
+# The single real-world referent, in the shared vocabulary.
+ex:Building_17 a ies:Entity ;
+    rdfs:label "Building 17 (shared referent)" ;
+    rdfs:comment "One persisting physical thing. As an ies:Entity it carries the operational picture; via the crosswalk (ies:Entity ~ hqdm:individual, hqdm:physical_object narrower) its spatial extent carries over to the built-and-physical-environment models." .
+
+# Geography's local view of it.
+ex:GF_Building_17 a pyrgeo:GeographicalFeature ;
+    rdfs:label "Building 17 as a Geographical_Feature (Geography component)" ;
+    bridge:refersTo ex:Building_17 .
+
+# Tactical Objects' local view of the same thing.
+ex:TO_Building_17 a pyrtac:TacticalObject ;
+    rdfs:label "Building 17 as a Tactical_Object (Tactical Objects component)" ;
+    bridge:refersTo ex:Building_17 .
+
+# Data Fusion's view: the same building enters the picture as a Fused_Object
+# (a characterisation of a real-world entity from evidence) before it is a
+# Tactical_Object. Three components, one referent.
+ex:FO_Building_17 a pyrdf:FusedObject ;
+    rdfs:label "Building 17 as a Fused_Object (Data Fusion component)" ;
+    bridge:refersTo ex:Building_17 .
+
+# The bridge assertion: the component-local objects denote one referent.
+ex:GF_Building_17 skos:exactMatch ex:TO_Building_17 .
+ex:TO_Building_17 skos:exactMatch ex:FO_Building_17 .
+
+#################################################################
+# Reified correspondences, using the crosswalk's own cw: vocabulary
+# and cw:Correspondence class, so shapes/crosswalk-shapes.ttl
+# validates them unchanged (run command in README).
+#################################################################
+
+bridge:curationActivity a prov:Activity ;
+    prov:startedAtTime "2026-07-02T00:00:00Z"^^xsd:dateTime ;
+    dcterms:description "Hand-curation of PYRAMID PRA component-entity groundings from the public Technical Standard V1.0, using the IES/HQDM crosswalk in this repository." ;
+    prov:used <http://informationexchangestandard.org/ont/ies/common/> ,
+              <http://www.semanticweb.org/magma-core/ontologies/hqdm> ,
+              <https://www.gov.uk/government/publications/pyramid> .
+
+bridge:corr-tacticalobject-entity a cw:Correspondence ;
+    cw:subject pyrtac:TacticalObject ;
+    cw:predicate skos:closeMatch ;
+    cw:object ies:Entity ;
+    cw:confidence "0.85"^^xsd:decimal ;
+    prov:wasGeneratedBy bridge:curationActivity ;
+    dcterms:description "Tactical_Object (a persisting battlespace entity) grounds in ies:Entity; the IES side of the bridge." .
+
+bridge:corr-geographicalfeature-physicalobject a cw:Correspondence ;
+    cw:subject pyrgeo:GeographicalFeature ;
+    cw:predicate skos:closeMatch ;
+    cw:object hqdm:physical_object ;
+    cw:confidence "0.72"^^xsd:decimal ;
+    prov:wasGeneratedBy bridge:curationActivity ;
+    dcterms:description "Geographical_Feature (tangible, e.g. a building) grounds in hqdm:physical_object; the HQDM/built-environment side of the bridge." .
+
+bridge:corr-geographicalfeature-entity a cw:Correspondence ;
+    cw:subject pyrgeo:GeographicalFeature ;
+    cw:predicate skos:closeMatch ;
+    cw:object ies:Entity ;
+    cw:confidence "0.60"^^xsd:decimal ;
+    prov:wasGeneratedBy bridge:curationActivity ;
+    dcterms:description "The IES-side grounding of Geographical_Feature; shared with Tactical_Object via crosswalk ies:Entity ~ hqdm:individual, which is what lets both resolve to one referent." .
+
+bridge:corr-fusedobject-entity a cw:Correspondence ;
+    cw:subject pyrdf:FusedObject ;
+    cw:predicate skos:closeMatch ;
+    cw:object ies:Entity ;
+    cw:confidence "0.80"^^xsd:decimal ;
+    prov:wasGeneratedBy bridge:curationActivity ;
+    dcterms:description "Fused_Object (Data Fusion) grounds in ies:Entity, the same type as Tactical_Object and Geographical_Feature; this is why the fusion->tactical->geography chain composes on one referent." .
+
+bridge:corr-behaviour-state a cw:Correspondence ;
+    cw:subject pyrtac:Behaviour ;
+    cw:predicate skos:closeMatch ;
+    cw:object ies:State ;
+    cw:confidence "0.80"^^xsd:decimal ;
+    prov:wasGeneratedBy bridge:curationActivity ;
+    dcterms:description "Behaviour (pattern of action and operational state) grounds in ies:State." .
+
+bridge:corr-capability-tac-falsefriend a cw:Correspondence ;
+    cw:subject pyrtac:Capability ;
+    cw:predicate skos:relatedMatch ;
+    cw:object ies:ClassOfEntity ;
+    cw:confidence "0.20"^^xsd:decimal ;
+    prov:wasGeneratedBy bridge:curationActivity ;
+    dcterms:description "FALSE FRIEND. Recorded at low confidence to warn against unifying pyrtac:Capability with pyrgeo:Capability on the shared label." .
+
+bridge:corr-capability-geo-falsefriend a cw:Correspondence ;
+    cw:subject pyrgeo:Capability ;
+    cw:predicate skos:relatedMatch ;
+    cw:object ies:ClassOfEntity ;
+    cw:confidence "0.20"^^xsd:decimal ;
+    prov:wasGeneratedBy bridge:curationActivity ;
+    dcterms:description "FALSE FRIEND, different scope from pyrtac:Capability. See README divergence D2." .

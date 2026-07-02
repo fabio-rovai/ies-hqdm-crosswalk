@@ -9,7 +9,7 @@ authors:
 version: 0.1.0
 date-released: 2026-07-01
 license: CC-BY-4.0
-url: "https://github.com/tesseract-academy/ies-hqdm-crosswalk"
+url: "https://github.com/fabio-rovai/ies-hqdm-crosswalk"
 abstract: >-
   The first public machine-readable crosswalk between the UK Information Exchange
   Standard (IES) and the Higher Quality Data Model (HQDM), two 4D upper ontologies

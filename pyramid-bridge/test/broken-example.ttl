@@ -1,0 +1,22 @@
+@prefix pyrgeo: <https://gov.tesseract.academy/ns/pyramid-pra/geography#> .
+@prefix pyrtac: <https://gov.tesseract.academy/ns/pyramid-pra/tactical-objects#> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
+@prefix ex2:    <https://w3id.org/tesseract/pyramid-bridge/broken#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+
+#################################################################
+# NEGATIVE fixture. This is what a naive bridge does wrong: it
+# unifies the two "Capability" entities on their shared label,
+# even though they denote nothing in common. bridge:CoReferenceShape
+# MUST flag this (pyshacl -> Conforms: False). A shape that never
+# fires proves nothing; this file is the proof that it fires.
+#################################################################
+
+ex2:cap_geo a pyrgeo:Capability ;
+    rdfs:label "Geography's Capability (ability to provide geographic information)" .
+
+ex2:cap_tac a pyrtac:Capability ;
+    rdfs:label "Tactical Objects' Capability (ability to maintain knowledge of tactical objects)" .
+
+# The illegal unification: no shared real-world referent -> must fail.
+ex2:cap_geo skos:exactMatch ex2:cap_tac .

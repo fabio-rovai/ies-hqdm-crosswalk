@@ -1,0 +1,44 @@
+digraph PyramidBridge {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+  node [fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=9, color="#555555"];
+  labelloc="t";
+  label=<<b>Grounding a PYRAMID inter-component bridge in IES / HQDM</b><br/><font point-size="10">The two components share no type and no identifier; the shared 4D ontology supplies the referent.</font>>;
+
+  subgraph cluster_pyramid {
+    label=<<b>PYRAMID PRA (Def Stan 00-134) — no shared data model</b>>;
+    style="rounded,filled"; fillcolor="#eef3fb"; color="#c2d3ee"; fontsize=11;
+
+    geo   [shape=box, style="rounded,filled", fillcolor="#ffffff", color="#4472c4",
+           label="Geography component (5.4.2.23)\nGeographical_Feature\ne.g. a building, terrain, a border"];
+    tac   [shape=box, style="rounded,filled", fillcolor="#ffffff", color="#4472c4",
+           label="Tactical Objects component (5.4.2.60)\nTactical_Object\ne.g. \"a building that is the target of an attack\""];
+
+    geo -> tac [dir=both, style=dashed, color="#c00000", fontcolor="#c00000",
+                label="  semantic gap\n  (bridge required, s5.2)  "];
+  }
+
+  bldg [shape=note, style="filled", fillcolor="#fff6e6", color="#e0a800",
+        label="Shared referent\nBuilding 17\n(one real-world thing)"];
+
+  subgraph cluster_onto {
+    label=<<b>Shared 4D vocabulary (this repository)</b>>;
+    style="rounded,filled"; fillcolor="#eef7ee"; color="#c2e0c2"; fontsize=11;
+
+    ies   [shape=box, style="rounded,filled", fillcolor="#ffffff", color="#2e7d32",
+           label="ies:Entity\n(operational picture)"];
+    hqdm  [shape=box, style="rounded,filled", fillcolor="#ffffff", color="#2e7d32",
+           label="hqdm:physical_object\n(built / physical environment)"];
+    ies -> hqdm [dir=both, color="#2e7d32", fontcolor="#2e7d32",
+                 label="  crosswalk\n  ies:Entity ~ hqdm:individual  "];
+  }
+
+  tac -> ies  [label="  grounds in  ", color="#2e7d32"];
+  geo -> hqdm [label="  grounds in  ", color="#2e7d32"];
+  geo -> ies  [style=dotted, color="#2e7d32"];
+
+  geo -> bldg [label="  refersTo  ", color="#e0a800", fontcolor="#b58900"];
+  tac -> bldg [label="  refersTo  ", color="#e0a800", fontcolor="#b58900"];
+}

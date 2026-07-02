@@ -3,7 +3,7 @@
 #   hqdm: "http://www.semanticweb.org/magma-core/ontologies/hqdm#"
 #   skos: "http://www.w3.org/2004/02/skos/core#"
 #   semapv: "https://w3id.org/semapv/vocab/"
-# mapping_set_id: "https://github.com/tesseract-academy/ies-hqdm-crosswalk"
+# mapping_set_id: "https://github.com/fabio-rovai/ies-hqdm-crosswalk"
 # mapping_set_title: "IES to HQDM 4D upper-ontology crosswalk"
 # mapping_set_version: "0.1.0"
 # license: "https://creativecommons.org/licenses/by/4.0/"
@@ -12,10 +12,10 @@
 # comment: "First public crosswalk between the UK Information Exchange Standard (IES) and the Higher Quality Data Model (HQDM). Backbone (4D) correspondences only in v0.1. All correspondences are candidate-for-review, hand-curated from the published ontologies (IES-Org/ont-ies ies-common.ttl; gchq/HQDM hqdm.owl) and grounded in the shared BORO / ISO 15926 4D tradition. Confidence is the curator's subjective strength. See DIVERGENCES.md for pairs that do NOT cleanly map."
 subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence	comment
 ies:Thing	Thing	skos:closeMatch	hqdm:thing	thing	semapv:ManualMappingCuration	0.75	Both are the abstract root of the ontology. IES Thing also parents abstract (non-4D) classes; HQDM thing parents abstract_object and spatio_temporal_extent.
-ies:Element	Element	skos:closeMatch	hqdm:spatio_temporal_extent	spatio_temporal_extent	semapv:ManualMappingCuration	0.9	IES Element is "a Thing that has a spatial extent and can have start and end dates" — the 4D individual root. Direct counterpart of the HQDM 4D root.
+ies:Element	Element	skos:closeMatch	hqdm:spatio_temporal_extent	spatio_temporal_extent	semapv:ManualMappingCuration	0.9	IES Element is "a Thing that has a spatial extent and can have start and end dates", the 4D individual root. Direct counterpart of the HQDM 4D root.
 ies:Entity	Entity	skos:closeMatch	hqdm:individual	individual	semapv:ManualMappingCuration	0.85	IES Entity = a whole-life, persisting thing (Person, Device, Organisation...). HQDM individual = a whole-life spatio_temporal_extent. Close; HQDM physical_object is a narrower alternative for tangible entities.
 ies:State	State	skos:closeMatch	hqdm:state	state	semapv:ManualMappingCuration	0.85	Both model a temporal part of an individual. Structural divergence: IES State is a top-level root class; HQDM state is subsumed under spatio_temporal_extent. See DIVERGENCES.md #3.
-ies:Event	Event	skos:closeMatch	hqdm:activity	activity	semapv:ManualMappingCuration	0.8	IES Event is "an activity or incident, involving one or more participants" — a happening. Its true HQDM counterpart is activity, NOT hqdm:event. See DIVERGENCES.md #1.
+ies:Event	Event	skos:closeMatch	hqdm:activity	activity	semapv:ManualMappingCuration	0.8	IES Event is "an activity or incident, involving one or more participants", a happening. Its true HQDM counterpart is activity, NOT hqdm:event. See DIVERGENCES.md #1.
 ies:Event	Event	skos:relatedMatch	hqdm:event	event	semapv:ManualMappingCuration	0.25	FALSE FRIEND. hqdm:event is an instantaneous temporal boundary (a point), not a happening. Recorded only to warn against the name-based mapping. See DIVERGENCES.md #1.
 ies:BoundingState	BoundingState	skos:relatedMatch	hqdm:event	event	semapv:ManualMappingCuration	0.55	IES bounds temporal extents with BoundingState (a State at the start/end); HQDM bounds them with event (a point) via beginning/ending. Same job, different ontological device. See DIVERGENCES.md #2.
 ies:PeriodOfTime	PeriodOfTime	skos:closeMatch	hqdm:period_of_time	period_of_time	semapv:ManualMappingCuration	0.88	Both are a temporal extent that is everywhere in space and bounded in time.

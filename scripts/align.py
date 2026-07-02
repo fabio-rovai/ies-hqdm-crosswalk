@@ -89,7 +89,7 @@ def cmd_candidates():
             print(f"LEXICAL\ties:{i}\thqdm:{hqdm_norm[key]}")
             hits += 1
     print(f"\n{hits} lexical candidate pairs. NOTE: lexical matches include FALSE FRIENDS "
-          f"(e.g. Event/event) — see DIVERGENCES.md. This is candidate generation only; "
+          f"(e.g. Event/event), see DIVERGENCES.md. This is candidate generation only; "
           f"real correspondences come from adjudication (stages 2-4).", file=sys.stderr)
 
 

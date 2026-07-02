@@ -1,0 +1,47 @@
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix bridge: <https://w3id.org/tesseract/pyramid-bridge/> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
+
+#################################################################
+# SHACL shapes for the PYRAMID inter-component bridge.
+# These make the bridge's discipline machine-enforced, not prose:
+# a co-reference between two component-local objects is only valid
+# when both denote the SAME real-world referent. This is what
+# forbids the "Capability" false-friend unification (README D2):
+# the two Capability entities share no referent, so unifying them
+# fails validation.
+#
+# Run:
+#   pyshacl -s shapes/bridge-shapes.ttl -df turtle pyramid-bridge/bridge.ttl
+#     -> Conforms: True
+#   pyshacl -s shapes/bridge-shapes.ttl -df turtle pyramid-bridge/test/broken-example.ttl
+#     -> Conforms: False  (catches the illegal unification)
+#################################################################
+
+bridge:CoReferenceShape a sh:NodeShape ;
+    sh:targetSubjectsOf skos:exactMatch ;
+    sh:sparql [
+        sh:message "Invalid bridge co-reference: two component-local objects are asserted skos:exactMatch but do not share a real-world referent (bridge:refersTo). This is the false-friend trap (e.g. unifying pyrtac:Capability with pyrgeo:Capability). Assert co-reference only when both objects refer to the same referent." ;
+        sh:prefixes bridge: ;
+        sh:select """
+            PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+            PREFIX bridge: <https://w3id.org/tesseract/pyramid-bridge/>
+            SELECT $this WHERE {
+                $this skos:exactMatch ?other .
+                FILTER NOT EXISTS {
+                    $this  bridge:refersTo ?r .
+                    ?other bridge:refersTo ?r .
+                }
+            }
+        """ ;
+    ] .
+
+# Every entity grounding must point to an ontology term by IRI.
+bridge:GroundingShape a sh:NodeShape ;
+    sh:targetSubjectsOf bridge:groundsIn ;
+    sh:property [
+        sh:path bridge:groundsIn ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "A PRA entity must ground in at least one IES/HQDM term, referenced by IRI." ;
+    ] .

@@ -20,6 +20,7 @@ The two ontologies are cousins (shared BORO and ISO 15926 heritage), so most of 
 | `shapes/crosswalk-shapes.ttl` | SHACL shapes validating the reified correspondences (every mapping has a subject, object, SKOS predicate, confidence in [0,1], and provenance). |
 | `scripts/align.py` | The reference candidate-generation and validation pipeline (rdflib). |
 | `safety-case/` | A worked example: grounding the autonomy of a SAPIENT (BSI Flex 335) sensor node in an IES-typed world model. |
+| `pyramid-bridge/` | A worked example: grounding a PYRAMID (Def Stan 00-134) inter-component bridge in IES/HQDM, so two PRA components that model the same object resolve to one referent. |
 
 ## Sources (both open)
 
@@ -32,12 +33,12 @@ This repository references those ontologies by IRI and does not redistribute the
 
 The curated backbone in v0.1.0 was hand-authored from the two published ontologies and grounded in their shared 4D commitments. It is the seed. The pipeline that extends it beyond the backbone, and that the wider `class-of` hierarchies genuinely need, is:
 
-1. **Candidate generation** — embedding retrieval over class and relation representations (after LLMs4OM, arXiv:2404.10317), with HNSW as the nearest-neighbour primitive. `scripts/align.py --candidates` gives the naive lexical baseline for triage.
-2. **Fuzzy adjudication** — interpretable, convergent fuzzy-logic scoring over classes and relations (FLORA, arXiv:2510.20467), with structural adjudication (KROMA, arXiv:2507.14032) for the cases where temporal-part structure, not lexical similarity, decides.
-3. **LLM oracle on the uncertain subset** — an LLM used only to validate high-uncertainty correspondences (arXiv:2508.08500), never to generate them blind.
-4. **Symbolic repair** — consistency checking of accepted correspondences (BERTMap-style, arXiv:2112.02682).
-5. **Documentation** — every correspondence recorded in SSSOM with predicate, confidence, and justification; complex non-1:1 correspondences expressed in EDOAL rather than forced into SKOS.
-6. **Validation** — SHACL over `shapes/`, following the published PROV-O→BFO mapping (Scientific Data, 2025) as the methodological template.
+1. **Candidate generation**, embedding retrieval over class and relation representations (after LLMs4OM, arXiv:2404.10317), with HNSW as the nearest-neighbour primitive. `scripts/align.py --candidates` gives the naive lexical baseline for triage.
+2. **Fuzzy adjudication**, interpretable, convergent fuzzy-logic scoring over classes and relations (FLORA, arXiv:2510.20467), with structural adjudication (KROMA, arXiv:2507.14032) for the cases where temporal-part structure, not lexical similarity, decides.
+3. **LLM oracle on the uncertain subset**, an LLM used only to validate high-uncertainty correspondences (arXiv:2508.08500), never to generate them blind.
+4. **Symbolic repair**, consistency checking of accepted correspondences (BERTMap-style, arXiv:2112.02682).
+5. **Documentation**, every correspondence recorded in SSSOM with predicate, confidence, and justification; complex non-1:1 correspondences expressed in EDOAL rather than forced into SKOS.
+6. **Validation**, SHACL over `shapes/`, following the published PROV-O→BFO mapping (Scientific Data, 2025) as the methodological template.
 
 Stages 2 to 4 run in Tesseract's [open-ontologies](https://github.com/fabio-rovai/open-ontologies) engine. This repository ships the seed, the documentation, the validation, and the reference candidate generator, so the whole method is inspectable.
 
