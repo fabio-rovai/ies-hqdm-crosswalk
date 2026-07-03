@@ -2,6 +2,8 @@
 
 **The first public crosswalk between the UK Information Exchange Standard (IES) and the Higher Quality Data Model (HQDM).** Two 4D upper ontologies from the same BORO / ISO 15926 tradition, one grown for defence and national-security data, one underpinning the National Digital Twin. Nobody had published a machine-readable alignment between them. This repository is a candidate-for-review crosswalk, released so that people building across the two can start from something concrete rather than from scratch.
 
+**At a glance: 17 backbone correspondences ([`crosswalk/ies-hqdm.sssom.tsv`](crosswalk/ies-hqdm.sssom.tsv)) and 6 curated divergences ([`DIVERGENCES.md`](DIVERGENCES.md)). All 17 resolve against the live published ontologies, and the SHACL shapes conform.**
+
 Maintained by [Tesseract Academy](https://gov.tesseract.academy). Companion to the working paper *Trusted, Interoperable Autonomy for UK Defence Data: Grounding Assurance in a Shared 4D Ontology* (Rovai, 2026).
 
 ## Why this exists
